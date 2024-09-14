@@ -16,6 +16,16 @@ log.save('Native (node.js) application has started');
 const nm = initNativeMessagingHost();
 
 
+// Test mode
+var args = process.argv.slice(2);
+args.forEach(async (arg) => {
+  if ([ 'test', '--test'].includes(arg) {
+    console.log('Test mode');
+    let categories = prediction.predictText("This is a test", "en");
+    console.log(categories);
+  }
+});
+
 
 function send(args : any) {
   nm.send(JSON.stringify(args))
