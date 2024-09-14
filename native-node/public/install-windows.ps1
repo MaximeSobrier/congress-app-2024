@@ -42,8 +42,13 @@ function Install-NvmAndNode {
     Start-Process -FilePath nvm-setup.exe -Wait
 
     Write-Host "Installing Node.js version $NodeVersion..."
-    nvm install $NodeVersion
-    nvm use $NodeVersion
+    try {
+        nvm install $NodeVersion
+        nvm use $NodeVersion
+    } catch {
+        Write-Host "Failed to install Node.js version $NodeVersion."
+        throw
+    }
 }
 
 # Function to ask for user permission with a custom message
@@ -125,7 +130,6 @@ $regFileUrl = "https://github.com/MaximeSobrier/congress-app-2024/raw/main/nativ
 $jsonFileUrl = "https://github.com/MaximeSobrier/congress-app-2024/raw/main/native-node/public/net.sobrier.maxime.classification_node.json.win"
 $regFilePath = "native-messaging.reg"
 
-
 # Download required files
 Download-File -Url $regFileUrl -DestinationPath $regFilePath
 Download-File -Url $jsonFileUrl -DestinationPath $GOOGLE_MESSAGING_FILE
@@ -147,7 +151,22 @@ if (-not (Test-Path -Path $APP_PATH)) {
 }
 
 # Replace a placeholder string in the GOOGLE_MESSAGING_FILE with the new APP_PATH
-(Get-Content $GOOGLE_MESSAGING_FILE) -replace 'PLACEHOLDER_PATH', $APP_PATH | Set-Content $GOOGLE_MESSAGING_FILE
+# (Get-Content $GOOGLE_MESSAGING_FILE) -replace 'PLACEHOLDER_PATH', $APP_PATH | Set-Content $GOOGLE_MESSAGING_FILE
+$content = Get-Content -Path $GOOGLE_MESSAGING_FILE
+$updatedContent = $content -replace '\\', '\\\\'
+Set-Content -Path $GOOGLE_MESSAGING_FILE -Value $updatedContent
+
+# Replace a placeholder string in the regFilePath with the new APP_PATH
+# (Get-Content $regFilePath) -replace 'PLACEHOLDER_PATH', $APP_PATH | Set-Content $regFilePath
+$content = Get-Content -Path $regFilePath
+$updatedContent = $content -replace '\\', '\\\\'
+Set-Content -Path $regFilePath -Value $updatedContent
+
+# Create the required directory if it does not exist
+if (-not (Test-Path -Path $GOOGLE_MESSAGING_DIR)) {
+    New-Item -ItemType Directory -Path $GOOGLE_MESSAGING_DIR -Force -ErrorAction Stop
+    Write-Host "Directory $GOOGLE_MESSAGING_DIR created."
+}
 
 # Copy the native messaging host manifest file to the required directory
 if (-not (Check-WritePermissions -Dir $GOOGLE_MESSAGING_DIR)) {
@@ -170,6 +189,12 @@ Download-File -Url $zipFileUrl -DestinationPath $zipFilePath
 
 # Unzip the file inside $APP_PATH
 Unzip-File -ZipFilePath $zipFilePath -DestinationPath $APP_PATH
+
+# Delete temporary files
+# Remove-Item -Path $zipFilePath -Force
+# Remove-Item -Path "native-messaging.reg" -Force
+# Remove-Item -Path "net.sobrier.maxime.classification_node.json" -Force
+
 
 
 # Launch Chrome with information to finish the installation

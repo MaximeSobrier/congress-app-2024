@@ -28,6 +28,9 @@ Open the **Windows PowerShell** and run this command:
 
     Set-ExecutionPolicy -Scope CurrentUser Unrestricted; Invoke-WebRequest -Uri https://raw.githubusercontent.com/MaximeSobrier/congress-app-2024/main/native-node/public/install-windows.ps1 -OutFile install-windows.ps1; .\install-windows.ps1
 
+Then, open the **Command Prompt** to install nodejs:
+     nvm install 20; nvm use 20
+
 ### Mac OSX automated installation
 
 
