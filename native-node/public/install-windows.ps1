@@ -152,8 +152,8 @@ if (-not (Test-Path -Path $APP_PATH)) {
     Write-Host "Directory $APP_PATH created."
 }
 
-# $APP_PATH_ESCAPE = $APP_PATH -replace '\\', '\\\\'
-$APP_PATH_ESCAPE = $APP_PATH
+$APP_PATH_ESCAPE = $APP_PATH -replace '\', '\\'
+# $APP_PATH_ESCAPE = $APP_PATH
 
 # Replace a placeholder string in the GOOGLE_MESSAGING_FILE with the new APP_PATH
 (Get-Content $GOOGLE_MESSAGING_FILE) -replace 'PLACEHOLDER_PATH', $APP_PATH_ESCAPE| Set-Content $GOOGLE_MESSAGING_FILE
