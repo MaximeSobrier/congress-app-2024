@@ -97,6 +97,7 @@ function Download-File {
     )
 
     try {
+        Write-Host "Downloading $Url to $DestinationPath ..."
         Invoke-WebRequest -Uri $Url -OutFile $DestinationPath
         Write-Host "Downloaded $Url to $DestinationPath"
     } catch {
@@ -113,6 +114,7 @@ function Unzip-File {
     )
 
     try {
+        Write-Host "Unzipping $ZipFilePath to $DestinationPath ..."
         Expand-Archive -Path $ZipFilePath -DestinationPath $DestinationPath -Force
         Write-Host "Unzipped $ZipFilePath to $DestinationPath"
     } catch {
