@@ -125,7 +125,7 @@ function Unzip-File {
 
 # Required Node.js version
 $REQUIRED_NODE_VERSION = 16
-$GOOGLE_MESSAGING_DIR = "C:\ProgramData\Google\Chrome\NativeMessagingHosts\"
+# $GOOGLE_MESSAGING_DIR = "C:\ProgramData\Google\Chrome\NativeMessagingHosts\"
 $GOOGLE_MESSAGING_FILE = "net.sobrier.maxime.classification_node.json"
 $URL_FINISH = "https://icategorize/com/extension/v1/install.html"
 $regFileUrl = "https://github.com/MaximeSobrier/congress-app-2024/raw/main/native-node/public/native-messaging.reg"
@@ -162,19 +162,19 @@ $APP_PATH_ESCAPE = $APP_PATH -replace '\\', '\\\\'
 
 
 # Create the required directory if it does not exist
-if (-not (Test-Path -Path $GOOGLE_MESSAGING_DIR)) {
-    New-Item -ItemType Directory -Path $GOOGLE_MESSAGING_DIR -Force -ErrorAction Stop
-    Write-Host "Directory $GOOGLE_MESSAGING_DIR created."
-}
+# if (-not (Test-Path -Path $GOOGLE_MESSAGING_DIR)) {
+#     New-Item -ItemType Directory -Path $GOOGLE_MESSAGING_DIR -Force -ErrorAction Stop
+#     Write-Host "Directory $GOOGLE_MESSAGING_DIR created."
+# }
 
 # Copy the native messaging host manifest file to the required directory
-if (-not (Check-WritePermissions -Dir $GOOGLE_MESSAGING_DIR)) {
-    if (Ask-Permission -Message "Allow admin access to write required file to $GOOGLE_MESSAGING_DIR.") {
-        Copy-Item -Path $GOOGLE_MESSAGING_FILE -Destination $GOOGLE_MESSAGING_DIR -Force -ErrorAction Stop
-    }
-} else {
-    Copy-Item -Path $GOOGLE_MESSAGING_FILE -Destination $GOOGLE_MESSAGING_DIR -Force
-}
+# if (-not (Check-WritePermissions -Dir $GOOGLE_MESSAGING_DIR)) {
+#     if (Ask-Permission -Message "Allow admin access to write required file to $GOOGLE_MESSAGING_DIR.") {
+#         Copy-Item -Path $GOOGLE_MESSAGING_FILE -Destination $GOOGLE_MESSAGING_DIR -Force -ErrorAction Stop
+#     }
+# } else {
+#     Copy-Item -Path $GOOGLE_MESSAGING_FILE -Destination $GOOGLE_MESSAGING_DIR -Force
+# }
 
 # Define the URL and paths
 $zipFileUrl = "https://icategorize.com/extension-chrome/web-classification.zip"
@@ -186,8 +186,11 @@ Download-File -Url $zipFileUrl -DestinationPath $zipFilePath
 # Unzip the file inside $APP_PATH
 Unzip-File -ZipFilePath $zipFilePath -DestinationPath $APP_PATH
 
+# Copy the native messaging host manifest file to the required directory
+Copy-Item -Path $GOOGLE_MESSAGING_FILE -Destination $APP_PATH -Force
+
 # Run native-message.reg to update the Windows registry
-Start-Process "reg.exe" -ArgumentList "import native-message.reg" -Wait -NoNewWindow
+Start-Process "reg.exe" -ArgumentList "import $regFilePath" -Wait -NoNewWindow
 
 # Delete temporary files
 # Remove-Item -Path $zipFilePath -Force
