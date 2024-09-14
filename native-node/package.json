@@ -5,14 +5,14 @@
   "bin": "dist/index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "build": "node_modules/typescript/bin/tsc && cp public/model.ftz dist/ && cp src/helpers/classifier/languages.stats.10k.compact.json dist/helpers/classifier/ && cp public/run.bat dist/ && cp public/run.sh",
+    "build": "node_modules/typescript/bin/tsc && cp public/model.ftz dist/ && cp src/helpers/classifier/languages.stats.10k.compact.json dist/helpers/classifier/ && cp public/run.bat dist/ && cp public/run.sh dist/",
     "package": "npm run build && rm -f web-classification.zip && cp -r node_modules dist/ && rm -rf dist/node_modules/fasttext.js/examples/ && cd dist && zip ../web-classification.zip -r * -x **/*.map -x *.map && cd ..",
     "start": "node dist/index.js"
   },
   "author": "Maxime Sobrier",
   "license": "ISC",
   "keywords": [],
-  "description": "Native application (node.js) for website classification extension",
+  "description": "Native application (node.js) for website classification extension", 
   "devDependencies": {
     "@types/stopword": "^2.0.0",
     "copy-webpack-plugin": "^11.0.0",
