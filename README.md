@@ -11,7 +11,7 @@ This work is based on the research published by Maxime Sobrier (paper to come). 
 
 The app is made of 2 components
 
-* a Google Chrome extensson to set the policy and block pages
+* a Google Chrome extension to set the policy and block pages
 * a native app (for WIndows, Linux and Mac OSX) that runs the small machine-learning model to classify web pages.
 
 The extension and the native app communicates through Google Chrome [Native messaging](https://developer.chrome.com/docs/extensions/develop/concepts/native-messaging)
@@ -26,7 +26,7 @@ The extension and the native app communicates through Google Chrome [Native mess
 
 Open the **Windows PowerShell** and run this command:
 
-    Set-ExecutionPolicy -Scope CurrentUser Unrestricted; Invoke-WebRequest -Uri https://raw.githubusercontent.com/MaximeSobrier/congress-app-2024/master/native-node/public/install-windows.ps1 -OutFile install-windows.ps1; \.\install-windows.ps1
+    Set-ExecutionPolicy -Scope CurrentUser Unrestricted; Invoke-WebRequest -Uri https://raw.githubusercontent.com/MaximeSobrier/congress-app-2024/main/native-node/public/install-windows.ps1 -OutFile install-windows.ps1; .\install-windows.ps1
 
 ### Mac OSX automated installation
 
@@ -40,4 +40,4 @@ Open the **Windows PowerShell** and run this command:
 
 ## Privacy
 
-This app runs completely locally. No data is sent to any external server. No analytics are sent externally
+This app runs completely locally. No data is sent to any external server. No analytics are sent externally.
