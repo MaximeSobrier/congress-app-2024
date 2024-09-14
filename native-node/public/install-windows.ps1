@@ -150,17 +150,14 @@ if (-not (Test-Path -Path $APP_PATH)) {
     Write-Host "Directory $APP_PATH created."
 }
 
+$APP_PATH_ESCAPE = $APP_PATH -replace '\\', '\\\\'
+
 # Replace a placeholder string in the GOOGLE_MESSAGING_FILE with the new APP_PATH
-# (Get-Content $GOOGLE_MESSAGING_FILE) -replace 'PLACEHOLDER_PATH', $APP_PATH | Set-Content $GOOGLE_MESSAGING_FILE
-$content = Get-Content -Path $GOOGLE_MESSAGING_FILE
-$updatedContent = $content -replace '\\', '\\\\'
-Set-Content -Path $GOOGLE_MESSAGING_FILE -Value $updatedContent
+(Get-Content $GOOGLE_MESSAGING_FILE) -replace 'PLACEHOLDER_PATH', $APP_PATH_ESCAPE| Set-Content $GOOGLE_MESSAGING_FILE
 
 # Replace a placeholder string in the regFilePath with the new APP_PATH
-# (Get-Content $regFilePath) -replace 'PLACEHOLDER_PATH', $APP_PATH | Set-Content $regFilePath
-$content = Get-Content -Path $regFilePath
-$updatedContent = $content -replace '\\', '\\\\'
-Set-Content -Path $regFilePath -Value $updatedContent
+(Get-Content $regFilePath) -replace 'PLACEHOLDER_PATH', $APP_PATH_ESCAPE | Set-Content $regFilePath
+
 
 # Create the required directory if it does not exist
 if (-not (Test-Path -Path $GOOGLE_MESSAGING_DIR)) {
@@ -177,9 +174,6 @@ if (-not (Check-WritePermissions -Dir $GOOGLE_MESSAGING_DIR)) {
     Copy-Item -Path $GOOGLE_MESSAGING_FILE -Destination $GOOGLE_MESSAGING_DIR -Force
 }
 
-# Run native-message.reg to update the Windows registry
-Start-Process "reg.exe" -ArgumentList "import native-message.reg" -Wait -NoNewWindow
-
 # Define the URL and paths
 $zipFileUrl = "https://icategorize.com/extension-chrome/web-classification.zip"
 $zipFilePath = "web-classification.zip"
@@ -189,6 +183,9 @@ Download-File -Url $zipFileUrl -DestinationPath $zipFilePath
 
 # Unzip the file inside $APP_PATH
 Unzip-File -ZipFilePath $zipFilePath -DestinationPath $APP_PATH
+
+# Run native-message.reg to update the Windows registry
+Start-Process "reg.exe" -ArgumentList "import native-message.reg" -Wait -NoNewWindow
 
 # Delete temporary files
 # Remove-Item -Path $zipFilePath -Force
