@@ -1,0 +1,6 @@
+info.txt
+**/build
+**/dist
+**/log
+**/node_modules
+**/package-lock.json

@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html>
+<head>
+ 
+  <link rel="stylesheet" href="css/materialize.min.css">
+  <link rel="stylesheet" href="css/options.css">
+
+  <link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons">
+  
+</head>
+<body>
+  <nav class="blue" style="position: fixed; z-index: 10; top:0;">
+    <div class="nav-wrapper">
+      
+      <ul id="nav-mobile" class="left">
+        <li><a href="#current">Page</a></li>
+        <li><a href="#policy-section">Policy</a></li>
+        <li><a href="#exceptions">Exceptions</a></li>
+        <li><a href="https://icategorize.com/" target="_blank">Website <i class="material-icons right" style="margin-left:5px;">launch</i></a></li>
+      </ul>
+    </div>
+  </nav>
+  <nav class="white" style="margin-top: 64px;">
+    <div class="nav-wrapper">
+      <h3 class="center" style="color: rgba(0,0,0,0.87); line-height: 1.5;">Website Classification Options</h3>
+    </div>
+  </nav>
+
+
+
+  <div class="row container-full">
+  
+    <h5 id="current">Current page</h5>
+    <p>URL: <span id="url"></span></p>
+    <p>URL categories: <span id="categories"></span><br />
+    Language: <span id="language"></span></p>
+
+    <hr>
+
+    <h5 id="policy-section">Policy</h5>
+    <p>Choose categories to block with a classification confidence of 50% or more.</p>
+    <p><button id="save" class="btn waves-effect waves-light blue">Save <i class="material-icons right">send</i></button></p>
+    <p><input type="text" placeholder="Search categories..." id="search" /></p>
+    <div id="policy"></div>
+    
+
+    <hr>
+
+    <h5 id="exceptions">Exceptions</h5>
+    <p><input type="text" placeholder="URL..." id="exception-url" /> <button id="add-exception-url" class="btn waves-effect waves-light blue">Exempt URL <i class="material-icons right">send</i></button></p>
+    <p><input type="text" placeholder="Domain..." id="exception-domain" /> <button id="add-exception-domain" class="btn waves-effect waves-light blue">Exempt domain <i class="material-icons right">send</i></button></p>
+
+    <h6>Domain exceptions:</h6>
+    <ul id="exceptions-domains" style="list-style-type: disc;"></ul>
+
+    <h6>URL exceptions:</h6>
+    <ul id="exceptions-urls" style="list-style-type: disc;"></ul>
+  </div>
+  <script src="action.js"></script>
+</body>
+</html>

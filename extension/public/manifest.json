@@ -1,0 +1,35 @@
+{
+  "name": "Website Classification",
+  "description": "Classify web pages in real-time using a local machine-learning model.",
+  "version": "1.0",
+  "manifest_version": 3,
+  "permissions": [
+     "activeTab",
+     "tabs",
+     "scripting",
+     "background",
+     "nativeMessaging",
+     "scripting",
+     "webNavigation",
+     "storage"
+  ],
+  "host_permissions": [
+    "https://*/*",
+    "http://*/*",
+    "*://*/*"
+  ],
+  "background": {
+     "service_worker": "background.js"
+  },
+  "action": {
+    "default_title": "Classification Settings",
+    "default_popup": "action.html"
+  },
+  "icons": {
+    "16": "icons/icon16.png",
+    "32": "icons/icon32.png",
+    "48": "icons/icon48.png",
+    "128": "icons/icon128.png"
+  },
+  "key": "MIIBIjANBgkqhkiG9w0BAQEFAAOCAQ8AMIIBCgKCAQEAplPnL9VYYKzbmQgwds/dIzu3VCa2VqP8UBGcGqPiW1nhSC5UReLyDY7d34Rs8u7Yf0QXgldeZB0yB1p03uYEJwLs5egaC10v5XOIrq+fkBmcMvgZuod+jphHnjmGvupI7YvMjRaywAzSJ4H65tDNtjnnsSYIf5FFzs5EFw4szAttSkPNi6ikkmz+mBroCvHv4Dtea/uIKDn7MFqfwOjbe6TUiNcMT8ZiOWKwPJRgg8u9KGk05kUBr3MZA0jCDT2i7hcOs/ZzkO9CUypi6ae5TDVtDW3sHIz6Nw/zvobbcFJxKVr9HfAeKTiIdu9agrG5OawLM0WPfVhRbpOfRlaOqQIDAQAB"
+}
