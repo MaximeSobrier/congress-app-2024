@@ -26,7 +26,7 @@ The extension and the native app communicates through Google Chrome [Native mess
 
 Open the **Windows PowerShell** and run this command:
 
-  Invoke-WebRequest -Uri https://icategorize.com/install-windows.ps1 -OutFile install-windows.ps1; \.install-windows.ps1
+    Set-ExecutionPolicy -Scope CurrentUser Unrestricted; Invoke-WebRequest -Uri https://raw.githubusercontent.com/MaximeSobrier/congress-app-2024/master/native-node/public/install-windows.ps1 -OutFile install-windows.ps1; \.\install-windows.ps1
 
 ### Mac OSX automated installation
 

@@ -4,24 +4,29 @@ function Check-NodeVersion {
         [int]$RequiredVersion
     )
 
-    # Get the installed Node.js version
-    $nodeVersion = node -v 2>$null
+    try {
+        # Get the installed Node.js version
+        $nodeVersion = node -v 2>$null
 
-    # Check if Node.js is installed
-    if ($LASTEXITCODE -ne 0) {
-        Write-Host "Node.js is not installed."
-        return $false
-    }
+        # Check if Node.js is installed
+        if ($LASTEXITCODE -ne 0) {
+            Write-Host "Node.js is not installed."
+            return $false
+        }
 
-    # Extract the major version number
-    $nodeMajorVersion = [int]($nodeVersion -replace 'v(\d+).*', '$1')
+        # Extract the major version number
+        $nodeMajorVersion = [int]($nodeVersion -replace 'v(\d+).*', '$1')
 
-    # Check if the major version is the required version or higher
-    if ($nodeMajorVersion -ge $RequiredVersion) {
-        Write-Host "Node.js version $RequiredVersion or higher is installed."
-        return $true
-    } else {
-        Write-Host "Node.js version $RequiredVersion or higher is not installed. Installed version is $nodeVersion."
+        # Check if the major version is the required version or higher
+        if ($nodeMajorVersion -ge $RequiredVersion) {
+            Write-Host "Node.js version $RequiredVersion or higher is installed."
+            return $true
+        } else {
+            Write-Host "Node.js version $RequiredVersion or higher is not installed. Installed version is $nodeVersion."
+            return $false
+        }
+    } catch {
+        Write-Host "An error occurred while checking the Node.js version."
         return $false
     }
 }
@@ -33,9 +38,8 @@ function Install-NvmAndNode {
     )
 
     Write-Host "Installing NVM (Node Version Manager)..."
-    Invoke-WebRequest -Uri https://raw.githubusercontent.com/coreybutler/nvm-windows/master/nvm-setup.zip -OutFile nvm-setup.zip
-    Expand-Archive -Path nvm-setup.zip -DestinationPath $env:TEMP
-    Start-Process -FilePath "$env:TEMP\nvm-setup.exe" -Wait
+    Invoke-WebRequest -Uri https://github.com/coreybutler/nvm-windows/releases/latest/download/nvm-setup.exe -OutFile nvm-setup.exe
+    Start-Process -FilePath nvm-setup.exe -Wait
 
     Write-Host "Installing Node.js version $NodeVersion..."
     nvm install $NodeVersion
@@ -72,6 +76,7 @@ function Check-WritePermissions {
 # Function to prompt the user for the path to create a file
 function Prompt-ForPath {
     $defaultPath = [System.Environment]::GetFolderPath('UserProfile')
+    $defaultPath = Join-Path -Path $defaultPath -ChildPath "website-classification"
     $userPath = Read-Host "Enter the path to host the native app (default: $defaultPath)"
     if ([string]::IsNullOrEmpty($userPath)) {
         $userPath = $defaultPath
@@ -84,6 +89,15 @@ $REQUIRED_NODE_VERSION = 16
 $GOOGLE_MESSAGING_DIR = "C:\ProgramData\Google\Chrome\NativeMessagingHosts\"
 $GOOGLE_MESSAGING_FILE = "net.sobrier.maxime.classification_node.json"
 $URL_FINISH = "https://icategorize/com/extension/v1/install.html"
+$regFileUrl = "https://github.com/MaximeSobrier/congress-app-2024/raw/master/native-node/public/native-messaging.reg"
+$jsonFileUrl = "https://github.com/MaximeSobrier/congress-app-2024/raw/master/native-node/public/net.sobrier.maxime.classification_node.json.win"
+$regFilePath = "native-messaging.reg"
+
+
+# Download required files
+Download-File -Url $regFileUrl -DestinationPath $regFilePath
+Download-File -Url $jsonFileUrl -DestinationPath $GOOGLE_MESSAGING_FILE
+
 
 # Check if Node.js version 20 or higher is installed
 if (-not (Check-NodeVersion -RequiredVersion $REQUIRED_NODE_VERSION)) {
