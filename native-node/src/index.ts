@@ -1,11 +1,18 @@
 const JsonLogFile = require('json-log-file');
+import fs from 'fs';
 
 const initNativeMessagingHost = require('node-native-messaging-host');
 
 import NewLanguage from './helpers/classifier/NewLanguage';
 import Prediction from './helpers/classifier/Prediction';
 
-const log = new JsonLogFile('../log/default.log', {showInConsole: false, useBuffer: true, bufferSavingTimeout: 1000});
+
+// Directory to hold log files
+if (!fs.existsSync('./log')) {
+  fs.mkdirSync('./log');
+}
+
+const log = new JsonLogFile('./log/default.log', {showInConsole: false, useBuffer: true, bufferSavingTimeout: 1000});
 
 
 const prediction = new Prediction();
@@ -21,8 +28,10 @@ var args = process.argv.slice(2);
 args.forEach(async (arg) => {
   if ([ 'test', '--test'].includes(arg)) {
     console.log('Test mode');
-    let categories = prediction.predictText("This is a test", "en");
+    let categories = await prediction.predictText("This is a test", "en");
     console.log(categories);
+
+    process.exit(0);
   }
 });
 
