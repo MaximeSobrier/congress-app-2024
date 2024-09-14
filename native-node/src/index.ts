@@ -2,18 +2,14 @@ const JsonLogFile = require('json-log-file');
 
 const initNativeMessagingHost = require('node-native-messaging-host');
 
-import Preparation from './helpers/classifier/Preparation';
 import NewLanguage from './helpers/classifier/NewLanguage';
 import Prediction from './helpers/classifier/Prediction';
-import Config from './helpers/config/Config';
 
 const log = new JsonLogFile('../log/default.log', {showInConsole: false, useBuffer: true, bufferSavingTimeout: 1000});
 
 
-const config = Config.get();
-const preparation = new Preparation();
 const prediction = new Prediction();
-const language = new NewLanguage(config.LANGUAGE_FILE);
+const language = new NewLanguage();
 
 log.save('Native (node.js) application has started');
 
@@ -33,11 +29,6 @@ nm.addOnMessageListener(async (error: any, msg: any) => {
       // log.save(msg).params;
 
       try {
-
-        if (!language.isLoaded()) {
-          await language.load();
-        }
-
         // let info = preparation.parseHtml(msg.params.html, msg.params.url, false);
         let text = msg.params.body + " " + msg.params.title;
         let lang = await language.getPreferredLanguage(text, ['en']);
