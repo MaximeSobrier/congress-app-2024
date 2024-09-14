@@ -84,6 +84,38 @@ function Prompt-ForPath {
     return $userPath
 }
 
+# Function to download a file from a URL
+function Download-File {
+    param (
+        [string]$Url,
+        [string]$DestinationPath
+    )
+
+    try {
+        Invoke-WebRequest -Uri $Url -OutFile $DestinationPath
+        Write-Host "Downloaded $Url to $DestinationPath"
+    } catch {
+        Write-Host "Failed to download $Url"
+        throw
+    }
+}
+
+# Function to unzip a file to a specified destination
+function Unzip-File {
+    param (
+        [string]$ZipFilePath,
+        [string]$DestinationPath
+    )
+
+    try {
+        Expand-Archive -Path $ZipFilePath -DestinationPath $DestinationPath -Force
+        Write-Host "Unzipped $ZipFilePath to $DestinationPath"
+    } catch {
+        Write-Host "Failed to unzip $ZipFilePath"
+        throw
+    }
+}
+
 # Required Node.js version
 $REQUIRED_NODE_VERSION = 16
 $GOOGLE_MESSAGING_DIR = "C:\ProgramData\Google\Chrome\NativeMessagingHosts\"
@@ -128,6 +160,16 @@ if (-not (Check-WritePermissions -Dir $GOOGLE_MESSAGING_DIR)) {
 
 # Run native-message.reg to update the Windows registry
 Start-Process "reg.exe" -ArgumentList "import native-message.reg" -Wait -NoNewWindow
+
+# Define the URL and paths
+$zipFileUrl = "https://icategorize.com/extension-chrome/web-classification.zip"
+$zipFilePath = "web-classification.zip"
+
+# Download the ZIP file
+Download-File -Url $zipFileUrl -DestinationPath $zipFilePath
+
+# Unzip the file inside $APP_PATH
+Unzip-File -ZipFilePath $zipFilePath -DestinationPath $APP_PATH
 
 
 # Launch Chrome with information to finish the installation
