@@ -6,7 +6,7 @@
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
     "build": "node_modules/typescript/bin/tsc && cp public/model.ftz dist/ && cp src/helpers/classifier/languages.stats.10k.compact.json dist/helpers/classifier/ && cp public/run.bat dist/ && cp public/run.sh dist/",
-    "package": "npm run build && rm -f web-classification.zip && cp -r node_modules dist/ && rm -rf dist/node_modules/fasttext.js/examples/ && rm -rf dist/node_modules/typescript && rm -rf dist/node_modules/webpack && rm -rf dist/node_modules/@types && rm -rf dist/node_modules/terser-webpack-plugin && cd dist && zip ../web-classification.zip -r * -x **/*.map -x *.map && cd ..",
+    "package": "rm -rf dist/ && npm run build && rm -f web-classification.zip && cp -r node_modules dist/ && rm -rf dist/node_modules/fasttext.js/examples/ && rm -rf dist/node_modules/typescript && rm -rf dist/node_modules/webpack && rm -rf dist/node_modules/@types && rm -rf dist/node_modules/terser-webpack-plugin && cp public/fasttext.exe dist/node_modules/fasttext.js/lib/bin/win32/fastText.exe && cd dist && zip ../web-classification.zip -r * -x **/*.map -x *.map && cd ..",
     "start": "node dist/index.js"
   },
   "author": "Maxime Sobrier",
