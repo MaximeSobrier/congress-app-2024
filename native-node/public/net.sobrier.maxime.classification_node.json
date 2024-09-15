@@ -1,7 +1,7 @@
 {
   "name": "net.sobrier.maxime.classification_node",
   "description": "Website classification in real time using a local machine-learning model",
-  "path": "/home/jsobrier/Projects/browser/congress/native-node/public/run.sh",
+  "path": "PLACEHOLDER_PATH/run.sh",
   "type": "stdio",
   "allowed_origins": ["chrome-extension://dngkfbfmbimmmmmjnmcoipkeappbalbb/"]
 }

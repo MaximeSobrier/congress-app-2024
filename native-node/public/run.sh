@@ -1,4 +1,4 @@
 #!/usr/bin/bash
 
-cd /home/jsobrier/Projects/browser/congress/native-node/dist
+cd PLACEHOLDER_PATH
 node index.js 2>&1 | tee -a native-node.log

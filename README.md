@@ -21,6 +21,9 @@ The extension and the native app communicates through Google Chrome [Native mess
 
 ### Linux automated installation
 
+In the console, run the following command:
+
+    curl https://raw.githubusercontent.com/MaximeSobrier/congress-app-2024/main/native-node/public/install-linux.sh | bash
 
 ### Windows automated installation
 

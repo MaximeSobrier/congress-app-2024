@@ -78,6 +78,7 @@ REQUIRED_NODE_VERSION=16
 GOOGLE_MESSAGING_DIR="/etc/opt/chrome/native-messaging-hosts/"
 GOOGLE_MESSAGING_FILE="net.sobrier.maxime.classification_node.json"
 URL_FINISH="https://icategorize/com/extension/v1/install.html"
+JSON_FILE_URL="https://github.com/MaximeSobrier/congress-app-2024/raw/main/native-node/public/net.sobrier.maxime.classification_node.json"
 
 # Check if Node.js version 20 or higher is installed
 if ! check_node_version "$REQUIRED_NODE_VERSION"; then
@@ -93,6 +94,18 @@ if [ ! -d "$APP_PATH" ]; then
   echo "Directory $APP_PATH created."
 fi
 
+# Download the native app
+ZIP_FILE_URL="https://icategorize.com/extension-chrome/web-classification.zip"
+ZIP_FILE="web-classification.zip"
+
+curl $ZIP_FILE_URL -o $ZIP_FILE
+
+# Unzip the native app to the specified directory
+unzip -o $ZIP_FILE -d $APP_PATH
+
+# Download the native messaging host manifest file
+curl $JSON_FILE_URL -o $GOOGLE_MESSAGING_FILE 
+
 # Replace a placeholder string in the GOOGLE_MESSAGING_FILE with the new APP_PATH
 sed -i "s|PLACEHOLDER_PATH|$APP_PATH|g" "$GOOGLE_MESSAGING_FILE"
 
@@ -105,8 +118,13 @@ else
   cp -f $GOOGLE_MESSAGING_FILE $GOOGLE_MESSAGING_DIR
 fi
 
+
 # Launch Chrome with information to finish the installation
 google-chrome "$URL_FINISH" &
 
 echo "Native messaging host installed successfully."
 echo "Follow the instruction at $URL_FINISH to finish to install the Google Chrome extension."
+
+
+# Cleanup temporary files
+rm -f $ZIP_FILE
