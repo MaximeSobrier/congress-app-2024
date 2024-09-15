@@ -41,6 +41,9 @@ function Install-NvmAndNode {
     Invoke-WebRequest -Uri https://github.com/coreybutler/nvm-windows/releases/latest/download/nvm-setup.exe -OutFile nvm-setup.exe
     Start-Process -FilePath nvm-setup.exe -Wait
 
+    # Refresh the environment variables
+    & "$env:ProgramFiles\nodejs\nodevars.bat"
+
     Write-Host "Installing Node.js version $NodeVersion..."
     try {
         nvm install $NodeVersion
@@ -152,7 +155,7 @@ if (-not (Test-Path -Path $APP_PATH)) {
     Write-Host "Directory $APP_PATH created."
 }
 
-$APP_PATH_ESCAPE = $APP_PATH -replace '\\', '\\\\'
+$APP_PATH_ESCAPE = $APP_PATH -replace '\\', '\\'
 # $APP_PATH_ESCAPE = $APP_PATH
 
 # Replace a placeholder string in the GOOGLE_MESSAGING_FILE with the new APP_PATH
