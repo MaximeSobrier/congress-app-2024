@@ -193,8 +193,6 @@ Unzip-File -ZipFilePath $zipFilePath -DestinationPath $APP_PATH
 # Copy the native messaging host manifest file to the required directory
 Copy-Item -Path $GOOGLE_MESSAGING_FILE -Destination $APP_PATH -Force
 
-# Update path in run.bat
-(Get-Content "$APP_PATH\run.bat") -replace 'PLACEHOLDER_PATH', $APP_PATH_ESCAPE| Set-Content "$APP_PATH\run.bat"
 
 # Run native-message.reg to update the Windows registry
 Start-Process "reg.exe" -ArgumentList "import $regFilePath" -Wait -NoNewWindow

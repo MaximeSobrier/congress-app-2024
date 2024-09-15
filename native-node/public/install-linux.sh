@@ -26,7 +26,7 @@ check_node_version() {
   fi
 }
 
-# Function to install NVM and Node.js version 20
+# Function to install NVM and Node.js version $REQUIRED_NODE_VERSION
 install_nvm_and_node() {
   echo "Installing NVM (Node Version Manager)..."
   curl -o- https://raw.githubusercontent.com/nvm-sh/nvm/v0.39.4/install.sh | bash
@@ -35,7 +35,7 @@ install_nvm_and_node() {
   export NVM_DIR="$([ -z "${XDG_CONFIG_HOME-}" ] && printf %s "${HOME}/.nvm" || printf %s "${XDG_CONFIG_HOME}/nvm")"
   [ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh" # This loads nvm
 
-  echo "Installing Node.js version 20..."
+  echo "Installing Node.js version $REQUIRED_NODE_VERSION..."
   nvm install $REQUIRED_NODE_VERSION
   nvm use $REQUIRED_NODE_VERSION
 }
