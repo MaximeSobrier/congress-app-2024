@@ -9,14 +9,12 @@
      "scripting",
      "background",
      "nativeMessaging",
-     "scripting",
      "webNavigation",
      "storage"
   ],
   "host_permissions": [
     "https://*/*",
-    "http://*/*",
-    "*://*/*"
+    "http://*/*"
   ],
   "background": {
      "service_worker": "background.js"
