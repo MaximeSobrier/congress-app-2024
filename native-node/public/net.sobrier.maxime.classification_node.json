@@ -3,5 +3,5 @@
   "description": "Website classification in real time using a local machine-learning model",
   "path": "PLACEHOLDER_PATH/run.sh",
   "type": "stdio",
-  "allowed_origins": ["chrome-extension://dngkfbfmbimmmmmjnmcoipkeappbalbb/"]
+  "allowed_origins": ["chrome-extension://beakpmhehilljkbehdgcnfnhbopfgmpn/"]
 }

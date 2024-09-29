@@ -3,6 +3,7 @@ import IABService from "./helpers/iab/IABService";
 
 var urls : any = { };
 var policy : string[] = [];
+var policyManaged : string[] = [];
 var exceptionsDomains : string[] = [];
 var exceptionsUrls : string[] = [];
 const confidence = 0.5;
@@ -47,10 +48,10 @@ async function handleResponseFromApp(response : any) {
     urls[response.url] = {
       categories: response.categories,
       language: response.language,
+      blocked: response.blocked || false,
     };
 
     let source = {tabId: response.tab, allFrames: false};
-
 
     applyPolicy(source, response.url);
 
@@ -61,9 +62,19 @@ async function handleResponseFromApp(response : any) {
     urls[response.url] = {
       categories: [],
       language: response.language,
+      blocked: response.blocked || false,
     };
 
+    let source = {tabId: response.tab, allFrames: false};
+
+    applyPolicy(source, response.url);
+
     chrome.runtime.sendMessage({event: "getClassification", tabId: response.tab, language: response.language, categories: ['IAB24-5'], url: response.url});
+  }
+  else if (response.command == "policy") {
+    console.log("Policy received");
+    console.log(response);
+    policyManaged = response.policy;
   }
   else {
     console.error(`Unknown command: ${response.command}`);
@@ -190,7 +201,9 @@ function applyPolicy(source : any, url : string = '') {
     return false;
   }
 
-  if (isException(url)) {
+  let blockedEnforced = urls[url].blocked || false;
+
+  if (isException(url) && !blockedEnforced) {
     console.log(`Exception for ${url}`);
     console.log(exceptionsUrls);
     console.log(exceptionsDomains);
@@ -205,8 +218,8 @@ function applyPolicy(source : any, url : string = '') {
     };
 
     let categories = urls[url].categories.filter((category: any) => category.score >= confidence) // only use categories with a high confidence;
-    let blocked = categories  .filter((category: any) => policy.includes(IABService.getWebId(category.iab))); // blocked by policies
-
+    let blocked = categories.filter((category: any) => policy.includes(IABService.getWebId(category.iab))); // blocked by policies
+    
 
     /*console.log(`Categories: ${categories.length}`);
     console.log(categories);
@@ -277,12 +290,13 @@ function applyPolicy(source : any, url : string = '') {
   </p>
 
   <h2>Policy applied</h2>
+  ${blockedEnforced ? '<p>This page was blocked by the managed policy.</p>' : `
   <p>This page was blocked according to your policy:</p>
   <ul>
   ${blocked.map((category: any) => {
     return `<li>${IABService.getName(category.iab)} -  ${Math.round(category.score * 100)}%</li>`;
   }).join(', ')}
-  </ul>
+  </ul>`}
 </div>
 <span style="display: none;" id="${secret}"></span>
 `;
@@ -306,10 +320,12 @@ function savePolicy(webs : string[] = []) {
   });
 }
 
-function loadPolicy(force : boolean = false) : Promise<string[]> {
+async function loadPolicy(force : boolean = false) : Promise<string[]> {
   if (!force) {
     return new Promise((resolve) => resolve(policy));
   }
+
+  await sendMessageToApp({tabId: -1, allFrames: false}, "Extension.getPolicy");
 
   return chrome.storage.local.get(["policy"]).then(async (result) => {
     console.log("Policy loaded");
@@ -364,7 +380,7 @@ chrome.runtime.onMessage.addListener(async function(message, sender, sendRespons
       console.log(`Sending policy: ${webs.join(',')}`);
       console.log(webs);
       //sendResponse({event: "getPolicy", webs});
-      chrome.runtime.sendMessage({event: "getPolicy", webs});
+      chrome.runtime.sendMessage({event: "getPolicy", webs, managed: policyManaged});
     });
 
   }

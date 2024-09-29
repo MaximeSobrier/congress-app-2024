@@ -49,6 +49,13 @@ chrome.runtime.onMessage.addListener(async function(message, sender, sendRespons
     console.log("getPolicy message");
     console.log(message);
 
+    if(!message.managed || message.managed.length == 0) {
+      console.log("No managed policy");
+    }
+    else {
+      hidePolicy();
+    }
+
     if (!message.webs || message.webs.length == 0) {
       console.log("No policy returned");
       return;
@@ -78,6 +85,10 @@ chrome.runtime.onMessage.addListener(async function(message, sender, sendRespons
     console.log(message);
   }
 });
+
+function hidePolicy() {
+  document.getElementById('managed')!.innerHTML = '<h5>Policy is managed by your organization.</h5>';
+}
 
 (async () => {
 

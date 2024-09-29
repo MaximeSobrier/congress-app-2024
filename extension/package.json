@@ -5,7 +5,9 @@
   "main": "index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "build": "webpack --config webpack/webpack.config.js"
+    "build": "webpack --config webpack/webpack.config.js",
+    "package": "rm extension.zip;  rm -rf dist/ && npm run build && cd dist && zip ../extension.zip -r * && cd .."
+
   },
   "keywords": [],
   "author": "",

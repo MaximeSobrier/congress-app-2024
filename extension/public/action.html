@@ -37,24 +37,27 @@
 
     <hr>
 
-    <h5 id="policy-section">Policy</h5>
-    <p>Choose categories to block with a classification confidence of 50% or more.</p>
-    <p><button id="save" class="btn waves-effect waves-light blue">Save <i class="material-icons right">send</i></button></p>
-    <p><input type="text" placeholder="Search categories..." id="search" /></p>
-    <div id="policy"></div>
-    
+    <div id="managed">
+      <h5 id="policy-section">Policy</h5>
+      <p>Choose categories to block with a classification confidence of 50% or more.</p>
+      <p><button id="save" class="btn waves-effect waves-light blue">Save <i class="material-icons right">send</i></button></p>
+      <p><input type="text" placeholder="Search categories..." id="search" /></p>
+      <div id="policy"></div>
+      
 
-    <hr>
+      <hr>
 
-    <h5 id="exceptions">Exceptions</h5>
-    <p><input type="text" placeholder="URL..." id="exception-url" /> <button id="add-exception-url" class="btn waves-effect waves-light blue">Exempt URL <i class="material-icons right">send</i></button></p>
-    <p><input type="text" placeholder="Domain..." id="exception-domain" /> <button id="add-exception-domain" class="btn waves-effect waves-light blue">Exempt domain <i class="material-icons right">send</i></button></p>
+      <h5 id="exceptions">Exceptions</h5>
+      <p><input type="text" placeholder="URL..." id="exception-url" /> <button id="add-exception-url" class="btn waves-effect waves-light blue">Exempt URL <i class="material-icons right">send</i></button></p>
+      <p><input type="text" placeholder="Domain..." id="exception-domain" /> <button id="add-exception-domain" class="btn waves-effect waves-light blue">Exempt domain <i class="material-icons right">send</i></button></p>
 
-    <h6>Domain exceptions:</h6>
-    <ul id="exceptions-domains" style="list-style-type: disc;"></ul>
+      <h6>Domain exceptions:</h6>
+      <ul id="exceptions-domains" style="list-style-type: disc;"></ul>
 
-    <h6>URL exceptions:</h6>
-    <ul id="exceptions-urls" style="list-style-type: disc;"></ul>
+      <h6>URL exceptions:</h6>
+      <ul id="exceptions-urls" style="list-style-type: disc;"></ul>
+
+    </div>
   </div>
   <script src="action.js"></script>
 </body>
