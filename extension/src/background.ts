@@ -218,7 +218,7 @@ function applyPolicy(source : any, url : string = '') {
     };
 
     let categories = urls[url].categories.filter((category: any) => category.score >= confidence) // only use categories with a high confidence;
-    let blocked = categories.filter((category: any) => policy.includes(IABService.getWebId(category.iab))); // blocked by policies
+    let blocked = urls[url].blocked || categories.filter((category: any) => policy.includes(IABService.getWebId(category.iab))); // blocked by policies
     
 
     /*console.log(`Categories: ${categories.length}`);

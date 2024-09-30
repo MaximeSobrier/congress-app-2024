@@ -1,5 +1,6 @@
 const JsonLogFile = require('json-log-file');
 import fs from 'fs';
+import path from 'path';
 
 const initNativeMessagingHost = require('node-native-messaging-host');
 
@@ -101,8 +102,10 @@ nm.addOnMessageListener(async (error: any, msg: any) => {
 
 function loadPolicy() {
   try {
-    let data : string = fs.readFileSync('policy.json', 'utf8');
+    let data : string = fs.readFileSync(__dirname + path.sep + 'policy.json', 'utf8');
     policy = JSON.parse(data);
+
+    log.save(`Policy loaded: ${policy.join(',')}`);
   }
   catch(e) {
     log.save('Error loading policy.json');

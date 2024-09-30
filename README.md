@@ -32,7 +32,8 @@ Open the **Windows PowerShell** and run this command:
     Set-ExecutionPolicy -Scope CurrentUser Unrestricted; Invoke-WebRequest -Uri https://raw.githubusercontent.com/MaximeSobrier/congress-app-2024/main/native-node/public/install-windows.ps1 -OutFile install-windows.ps1; .\install-windows.ps1 -enforce=$false -scope=user
 
 Then, open the **Command Prompt** to install nodejs:
-     nvm install 16; nvm use 16
+
+    nvm install 16; nvm use 16
 
 To enforce a policy (a list of categories to block), and to ensure all users on the computer have the extension installed an the policy enforced, do the flollowing:
 1. Generate a `policy.json` file using [https://icategorize.com/extension/policy.html](https://icategorize.com/extension/policy.html)

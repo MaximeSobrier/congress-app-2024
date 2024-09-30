@@ -1,3 +1,9 @@
+param (
+    [string]$APP_PATH = "",
+    [bool]$enforce = $false
+    [string]$scope = "user",
+)
+
 # Function to check if Node.js version is the specified version or higher
 function Check-NodeVersion {
     param (
@@ -126,6 +132,28 @@ function Unzip-File {
     }
 }
 
+# Function to set folder permissions to prevent deletion or modification
+function Set-FolderPermissions {
+    param (
+        [string]$FolderPath
+    )
+
+    try {
+        $acl = Get-Acl -Path $FolderPath
+        $currentUser = [System.Security.Principal.WindowsIdentity]::GetCurrent().Name
+
+        # Remove write and delete permissions for the current user
+        $denyRule = New-Object System.Security.AccessControl.FileSystemAccessRule($currentUser, "Write,Delete", "Deny")
+        $acl.AddAccessRule($denyRule)
+
+        Set-Acl -Path $FolderPath -AclObject $acl
+        Write-Host "Set permissions to prevent deletion or modification of $FolderPath"
+    } catch {
+        Write-Host "Failed to set permissions for $FolderPath"
+        throw
+    }
+}
+
 # Required Node.js version
 $REQUIRED_NODE_VERSION = 16
 # $GOOGLE_MESSAGING_DIR = "C:\ProgramData\Google\Chrome\NativeMessagingHosts\"
@@ -149,7 +177,10 @@ if (-not (Check-NodeVersion -RequiredVersion $REQUIRED_NODE_VERSION)) {
 }
 
 # Prompt the user for the path to host the native app
-$APP_PATH = Prompt-ForPath
+if ([string]::IsNullOrEmpty($APP_PATH)) {
+    $APP_PATH = Prompt-ForPath
+}
+
 if (-not (Test-Path -Path $APP_PATH)) {
     New-Item -ItemType Directory -Path $APP_PATH
     Write-Host "Directory $APP_PATH created."
@@ -163,6 +194,20 @@ $APP_PATH_ESCAPE = $APP_PATH -replace '\\', '\\'
 
 # Replace a placeholder string in the regFilePath with the new APP_PATH
 (Get-Content $regFilePath) -replace 'PLACEHOLDER_PATH', $APP_PATH_ESCAPE | Set-Content $regFilePath
+
+# Register the native app for all users if the scope is not "user"
+if ($scope -ne "user") {
+    (Get-Content $regFilePath) -replace 'HKEY_CURRENT_USER', "HKEY_LOCAL_MACHINE" | Set-Content $regFilePath
+}
+
+# Set Google Chrome policy to enforce the user of the extension
+if($enforce) {
+    if ($scope -eq "user") {
+        New-ItemProperty –Path "HKCU\SOFTWARE\Policies\Google\Chrome\ExtensionInstallForcelist " -Name "Website Classification" -Value beakpmhehilljkbehdgcnfnhbopfgmpn
+    } else {
+        New-ItemProperty –Path "HKLM\SOFTWARE\Policies\Google\Chrome\ExtensionInstallForcelist " -Name "Website Classification" -Value beakpmhehilljkbehdgcnfnhbopfgmpn
+    }
+}
 
 
 # Create the required directory if it does not exist
@@ -198,10 +243,23 @@ Copy-Item -Path $GOOGLE_MESSAGING_FILE -Destination $APP_PATH -Force
 Start-Process "reg.exe" -ArgumentList "import $regFilePath" -Wait -NoNewWindow
 
 # Delete temporary files
-# Remove-Item -Path $zipFilePath -Force
-# Remove-Item -Path "native-messaging.reg" -Force
-# Remove-Item -Path "net.sobrier.maxime.classification_node.json" -Force
+Remove-Item -Path $zipFilePath -Force
+Remove-Item -Path "native-messaging.reg" -Force
+Remove-Item -Path "net.sobrier.maxime.classification_node.json" -Force
+Remove-Item -Path "nvm-setup.exe" -Force
 
+# poloicy.json must exist if enforce is true
+if ($enforce -and -not (Test-Path -Path "policy.json")) {
+    Write-Host "Please create a file policy.json in the current directory. Go to https://icategorize.com/extension/policy.html to generate the list of categorise to block."
+    exit 0
+}
+
+
+# Set folder permissions to prevent deletion or modification
+if ($enforce) {
+    Copy-Item -Path "policy.json" -Destination $APP_PATH -Force
+    Set-FolderPermissions -FolderPath $APP_PATH
+}
 
 
 # Launch Chrome with information to finish the installation
