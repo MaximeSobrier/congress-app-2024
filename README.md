@@ -11,10 +11,10 @@ This work is based on the research published by Maxime Sobrier (paper to come). 
 
 The app is made of 2 components
 
-* a Google Chrome extension to set the policy and block pages
-* a native app (for WIndows, Linux and Mac OSX) that runs the small machine-learning model to classify web pages.
+* a [Google Chrome extension](https://chromewebstore.google.com/detail/website-classification/beakpmhehilljkbehdgcnfnhbopfgmpn) to set the policy and block pages
+* a native app (for Windows, Linux and Mac OSX) that runs the small machine-learning model to classify web pages.
 
-The extension and the native app communicates through Google Chrome [Native messaging](https://developer.chrome.com/docs/extensions/develop/concepts/native-messaging)
+The extension and the native app communicates through Google Chrome [Native messaging](https://developer.chrome.com/docs/extensions/develop/concepts/native-messaging).
 
 
 ## Automated installation
@@ -35,9 +35,10 @@ Then, open the **Command Prompt** to install nodejs:
 
     nvm install 16; nvm use 16
 
-To enforce a policy (a list of categories to block), and to ensure all users on the computer have the extension installed an the policy enforced, do the flollowing:
+To enforce a policy (a list of categories to block), and to ensure all users on the computer have the extension installed an the policy enforced, do the following:
 1. Generate a `policy.json` file using [https://icategorize.com/extension/policy.html](https://icategorize.com/extension/policy.html)
 2. Run the script `install-windows.ps1` with these arguments:
+
 
     install-windows.ps1 -enforce=$true -scope=computer
  

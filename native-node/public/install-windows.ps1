@@ -158,7 +158,7 @@ function Set-FolderPermissions {
 $REQUIRED_NODE_VERSION = 16
 # $GOOGLE_MESSAGING_DIR = "C:\ProgramData\Google\Chrome\NativeMessagingHosts\"
 $GOOGLE_MESSAGING_FILE = "net.sobrier.maxime.classification_node.json"
-$URL_FINISH = "https://icategorize.com/extension/v1/install.html"
+$URL_FINISH = "https://chromewebstore.google.com/detail/website-classification/beakpmhehilljkbehdgcnfnhbopfgmpn"
 $regFileUrl = "https://github.com/MaximeSobrier/congress-app-2024/raw/main/native-node/public/native-messaging.reg"
 $jsonFileUrl = "https://github.com/MaximeSobrier/congress-app-2024/raw/main/native-node/public/net.sobrier.maxime.classification_node.json.win"
 $regFilePath = "native-messaging.reg"
