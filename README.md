@@ -4,7 +4,7 @@ This repository contains the source code of the Google Chrome extension submitte
 
 This app classifies web pages based on their content in real-time across 345 categories
 
-This work is based on the research published by Maxime Sobrier (paper to come). More information about the research is available at [https://icategorize.com/](https://icategorize.com/). The 2 innovations include:
+This work is based on the research published by Maxime Sobrier (paper to published at the IEEE Conference on Future Machine Learning and Data Science, Sydney, 2024). More information about the research is available at [https://icategorize.com/](https://icategorize.com/). The 2 innovations include:
 
 * small fastText models that achieve 94% precision on English content. This extension use the 35MB model.
 * a new library (to be published on gitHub and npm soon) that identifies languages accurately with a low memory footprint
