@@ -1,7 +1,7 @@
 param (
     [string]$APP_PATH = "",
-    [bool]$enforce = $false
-    [string]$scope = "user",
+    [bool]$enforce = $false,
+    [string]$scope = "user"
 )
 
 # Function to check if Node.js version is the specified version or higher

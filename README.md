@@ -39,9 +39,8 @@ To enforce a policy (a list of categories to block), and to ensure all users on 
 1. Generate a `policy.json` file using [https://icategorize.com/extension/policy.html](https://icategorize.com/extension/policy.html)
 2. Run the script `install-windows.ps1` with these arguments:
 
-
     install-windows.ps1 -enforce=$true -scope=computer
- 
+
 ### Mac OSX automated installation
 
 
