@@ -1,5 +1,44 @@
 #!/bin/bash
 
+# Default values for optional arguments
+ENFORCE=false
+SCOPE="user"
+APP_PATH="/tmp/test"
+
+# Function to display usage
+usage() {
+    echo "Usage: $0 [-enforce] [-scope=user|all] [-path=path]"
+    exit 1
+}
+
+# Parse command-line options
+while getopts ":enforce:scope:path:" opt; do
+    case $opt in
+        enforce)
+            ENFORCE=true
+            ;;
+        scope)
+            if [[ "$OPTARG" == "user" || "$OPTARG" == "all" ]]; then
+                SCOPE="$OPTARG"
+            else
+                echo "Invalid value for -scope. It must be either 'user' or 'all'."
+                usage
+            fi
+            ;;
+        path)
+            APP_PATH="$OPTARG"
+            ;;
+        \?)
+            echo "Invalid option: -$OPTARG"
+            usage
+            ;;
+        :)
+            echo "Option -$OPTARG requires an argument."
+            usage
+            ;;
+    esac
+done
+
 # Function to check if Node.js version is the specified version or higher
 check_node_version() {
   local required_version="$1"
@@ -77,8 +116,9 @@ prompt_for_path() {
 REQUIRED_NODE_VERSION=16
 GOOGLE_MESSAGING_DIR="/etc/opt/chrome/native-messaging-hosts/"
 GOOGLE_MESSAGING_FILE="net.sobrier.maxime.classification_node.json"
-URL_FINISH="https://icategorize/com/extension/v1/install.html"
+URL_FINISH="https://chromewebstore.google.com/detail/website-classification/beakpmhehilljkbehdgcnfnhbopfgmpn"
 JSON_FILE_URL="https://github.com/MaximeSobrier/congress-app-2024/raw/main/native-node/public/net.sobrier.maxime.classification_node.json"
+POLICY_LINUX_URL="https://github.com/MaximeSobrier/congress-app-2024/raw/main/native-node/public/website-classification.json"
 
 # Check if Node.js version 20 or higher is installed
 if ! check_node_version "$REQUIRED_NODE_VERSION"; then
@@ -88,7 +128,10 @@ if ! check_node_version "$REQUIRED_NODE_VERSION"; then
 fi
 
 # Prompt the user for the path to host the native app
-APP_PATH=$(prompt_for_path)
+if [ $APP_PATH -eq "" ]; then
+  APP_PATH=$(prompt_for_path)
+fi
+
 if [ ! -d "$APP_PATH" ]; then
   mkdir -p "$APP_PATH"
   echo "Directory $APP_PATH created."
@@ -116,6 +159,32 @@ if ! check_write_permissions "$GOOGLE_MESSAGING_DIR" ; then
   sudo cp -f $GOOGLE_MESSAGING_FILE $GOOGLE_MESSAGING_DIR
 else
   cp -f $GOOGLE_MESSAGING_FILE $GOOGLE_MESSAGING_DIR
+fi
+
+# Set policies if enforcing
+if [ "$ENFORCE" = true ]; then
+  if [! -f "policy.json" ]; then
+    echo "Please create a file policy.json in the current directory. Go to https://icategorize.com/extension/policy.html to generate the list of categories to block."
+    exit 1
+  fi
+
+  POLICY_DIR="/etc/opt/chrome/policies/managed"
+
+  if [ "$SCOPE" = "user" ]; then
+      POLICY_DIR="$HOME/.config/chrome/policies/managed"
+  fi
+
+  if ! check_write_permissions "$POLICY_DIR" ; then
+    ask_permission "Allow sudo access to write required file to $POLICY_DIR."
+    sudo mkdir -p $POLICY_DIR
+    sudo cp -f policy.json $POLICY_DIR
+    sudo curl POLICY_LINUX_URL -o $"$POLICY_DIR/website-classification.json"
+    sudo chmod -w $POLICY_DIR
+  else
+    mkdir -p $POLICY_DIR
+    cp -f policy.json $POLICY_DIR
+    curl POLICY_LINUX_URL -o $"$POLICY_DIR/website-classification.json"
+    chmod -w $POLICY_DIR
 fi
 
 
