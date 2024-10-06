@@ -35,6 +35,7 @@ To enforce a policy (a list of categories to block), and to ensure all users on 
 
     install-windows.ps1 -enforce=$true -scope=computer
 
+
 ### Mac OSX automated installation
 
 In the terminal, run the following command:
@@ -43,7 +44,7 @@ In the terminal, run the following command:
 
 To enforce a policy (a list of categories to block), and to ensure all users on the computer have the extension installed an the policy enforced, do the following:
 1. Generate a `policy.json` file using [https://icategorize.com/extension/policy.html](https://icategorize.com/extension/policy.html)
-2. Run the script `install-windows.ps1` with these arguments:
+2. Use com.google.Chrome.plist to generate a policy
 
 ### Linux automated installation
 
@@ -53,21 +54,27 @@ In the console, run the following command:
 
 To enforce a policy (a list of categories to block), and to ensure all users on the computer have the extension installed an the policy enforced, do the following:
 1. Generate a `policy.json` file using [https://icategorize.com/extension/policy.html](https://icategorize.com/extension/policy.html)
-2. Use com.google.Chrome.plist to generate a policy
+2. Run the script `install-linux.sh` with these arguments:
+
+
+    bash install-linux.sh -enforce -scope=computer
+
 
 ## Manual Installation
 
 Prerequisites: node.js 16 or higher
 
-1. Download the native App at (https://icategorize.com/extension-chrome/web-classification.zip)
+1. Download the native App at https://icategorize.com/extension-chrome/web-classification.zip
 2. Unzip the archive
 3. Test that the native app is working: node index.js --test
-4. Register the Native messaging host: (https://developer.chrome.com/docs/extensions/develop/concepts/native-messaging)
-5. Install the extension at (https://chromewebstore.google.com/detail/website-classification/beakpmhehilljkbehdgcnfnhbopfgmpn)
+4. Register the Native messaging host: https://developer.chrome.com/docs/extensions/develop/concepts/native-messaging
+5. Install the extension at https://chromewebstore.google.com/detail/website-classification/beakpmhehilljkbehdgcnfnhbopfgmpn
 
 
 ## Future work
 
+1. Replace the node.js app with a Go binary to simplify the installation
+2. Warn the user is fh native APp is not installed or configured
 
 
 ## Privacy
