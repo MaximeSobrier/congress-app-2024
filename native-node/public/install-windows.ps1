@@ -250,7 +250,7 @@ Remove-Item -Path "nvm-setup.exe" -Force
 
 # poloicy.json must exist if enforce is true
 if ($enforce -and -not (Test-Path -Path "policy.json")) {
-    Write-Host "Please create a file policy.json in the current directory. Go to https://icategorize.com/extension/policy.html to generate the list of categorise to block."
+    Write-Host "Please create a file policy.json in the current directory. Go to https://icategorize.com/extension/policy.html to generate the list of categories to block."
     exit 0
 }
 
