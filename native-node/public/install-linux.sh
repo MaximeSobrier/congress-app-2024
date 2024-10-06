@@ -7,36 +7,37 @@ APP_PATH=""
 
 # Function to display usage
 usage() {
-    echo "Usage: $0 [-enforce] [-scope=user|all] [-path=path]"
+    echo "Usage: $0 [--enforce true] [--scope user|all] [--path path]"
     exit 1
 }
 
-# Parse command-line options
-while getopts ":enforce:scope:path:" opt; do
-    case $opt in
-        enforce)
-            ENFORCE=true
-            ;;
-        scope)
-            if [[ "$OPTARG" == "user" || "$OPTARG" == "all" ]]; then
-                SCOPE="$OPTARG"
-            else
-                echo "Invalid value for -scope. It must be either 'user' or 'all'."
-                usage
-            fi
-            ;;
-        path)
-            APP_PATH="$OPTARG"
-            ;;
-        \?)
-            echo "Invalid option: -$OPTARG"
-            usage
-            ;;
-        :)
-            echo "Option -$OPTARG requires an argument."
-            usage
-            ;;
-    esac
+# Parse long options
+while [[ $# -gt 0 ]]; do
+  case "$1" in
+    --enforce)
+      ENFORCE="$2"
+      shift 2
+      ;;
+    --path)
+      APP_PATH="$2"
+      shift 2
+      ;;
+    --scope)
+      SCOPE="$2"
+      if [[ "$2" == "user" || "$2" == "all" ]]; then
+          SCOPE="$2"
+      else
+          echo "Invalid value for -scope. It must be either 'user' or 'all'."
+          usage
+      fi
+      shift 2
+      ;;  
+    *)
+      echo "Invalid option: $1"
+      usage
+      exit 1
+      ;;
+  esac
 done
 
 # Function to check if Node.js version is the specified version or higher
@@ -144,7 +145,7 @@ ZIP_FILE="web-classification.zip"
 curl $ZIP_FILE_URL -o $ZIP_FILE
 
 # Unzip the native app to the specified directory
-unzip -o $ZIP_FILE -d $APP_PATH
+unzip -q -o $ZIP_FILE -d $APP_PATH
 
 # Download the native messaging host manifest file
 curl $JSON_FILE_URL -o $GOOGLE_MESSAGING_FILE 
@@ -165,27 +166,27 @@ fi
 
 # Set policies if enforcing
 if [ "$ENFORCE" = true ]; then
-  if [! -f "policy.json" ]; then
+  if [ ! -f "policy.json" ]; then
     echo "Please create a file policy.json in the current directory. Go to https://icategorize.com/extension/policy.html to generate the list of categories to block."
     exit 1
   fi
 
   POLICY_DIR="/etc/opt/chrome/policies/managed"
 
-  if [ "$SCOPE" = "user" ]; then
-      POLICY_DIR="$HOME/.config/chrome/policies/managed"
-  fi
+  # if [ "$SCOPE" = "user" ]; then
+  #     POLICY_DIR="$HOME/.config/chrome/policies/managed"
+  # fi
 
   if ! check_write_permissions "$POLICY_DIR" ; then
     ask_permission "Allow sudo access to write required file to $POLICY_DIR."
     sudo mkdir -p $POLICY_DIR
     sudo cp -f policy.json $POLICY_DIR
-    sudo curl POLICY_LINUX_URL -o $"$POLICY_DIR/website-classification.json"
+    sudo curl $POLICY_LINUX_URL -o $"$POLICY_DIR/website-classification.json"
     sudo chmod -w $POLICY_DIR
   else
     mkdir -p $POLICY_DIR
     cp -f policy.json $POLICY_DIR
-    curl POLICY_LINUX_URL -o $"$POLICY_DIR/website-classification.json"
+    curl $POLICY_LINUX_URL -o $"$POLICY_DIR/website-classification.json"
     chmod -w $POLICY_DIR
   fi
 fi
