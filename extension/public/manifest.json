@@ -1,7 +1,7 @@
 {
   "name": "Website Classification",
   "description": "Classify web pages in real-time using a local machine-learning model.",
-  "version": "1.0",
+  "version": "1.0.2",
   "manifest_version": 3,
   "permissions": [
      "activeTab",

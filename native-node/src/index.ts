@@ -101,8 +101,15 @@ nm.addOnMessageListener(async (error: any, msg: any) => {
 
 
 function loadPolicy() {
+  let file = __dirname + path.sep + 'policy.json';
   try {
-    let data : string = fs.readFileSync(__dirname + path.sep + 'policy.json', 'utf8');
+    if (!fs.existsSync(file)) {
+      log.save('Policy file not found');
+      policy = [];
+      return;
+    }
+
+    let data : string = fs.readFileSync(file, 'utf8');
     policy = JSON.parse(data);
 
     log.save(`Policy loaded: ${policy.join(',')}`);
