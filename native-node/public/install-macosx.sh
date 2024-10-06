@@ -71,6 +71,7 @@ check_node_version() {
 # Function to install NVM and Node.js version $REQUIRED_NODE_VERSION
 install_nvm_and_node() {
   echo "Installing NVM (Node Version Manager)..."
+  xcode-select --install
   curl -o- https://raw.githubusercontent.com/nvm-sh/nvm/v0.39.4/install.sh | bash
 
   # Load NVM
@@ -153,17 +154,17 @@ unzip -q -o $ZIP_FILE -d $APP_PATH
 curl $JSON_FILE_URL -o $GOOGLE_MESSAGING_FILE 
 
 # Replace a placeholder string in the GOOGLE_MESSAGING_FILE with the new APP_PATH
-sed -i "s|PLACEHOLDER_PATH|$APP_PATH|g" "$GOOGLE_MESSAGING_FILE"
+sed -i '' "s|PLACEHOLDER_PATH|$APP_PATH|g" "$GOOGLE_MESSAGING_FILE"
 
 
 # Copy the native messaging host manifest file to the required directory
 if ! check_write_permissions "$GOOGLE_MESSAGING_DIR" ; then
   ask_permission "Allow sudo access to write required file to $GOOGLE_MESSAGING_DIR."
-  sudo mkdir -p $GOOGLE_MESSAGING_DIR
-  sudo cp -f $GOOGLE_MESSAGING_FILE $GOOGLE_MESSAGING_DIR
+  sudo mkdir -p "$GOOGLE_MESSAGING_DIR"
+  sudo cp -f "$GOOGLE_MESSAGING_FILE" "$GOOGLE_MESSAGING_DIR"
 else
-  mkdir -p $GOOGLE_MESSAGING_DIR
-  cp -f $GOOGLE_MESSAGING_FILE $GOOGLE_MESSAGING_DIR
+  mkdir -p "$GOOGLE_MESSAGING_DIR"
+  cp -f "$GOOGLE_MESSAGING_FILE" "$GOOGLE_MESSAGING_DIR"
 fi
 
 # Set policies if enforcing
@@ -180,7 +181,7 @@ fi
 
 
 # Launch Chrome with information to finish the installation
-google-chrome "$URL_FINISH" &
+open "$URL_FINISH"
 
 echo "Native messaging host installed successfully."
 echo "Follow the instruction at $URL_FINISH to finish to install the Google Chrome extension."
