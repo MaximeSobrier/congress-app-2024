@@ -37,21 +37,33 @@ To enforce a policy (a list of categories to block), and to ensure all users on 
 
 ### Mac OSX automated installation
 
-### Linux automated installation
+In the terminal, run the following command:
 
-In the console, run the following command:
-
-    curl https://raw.githubusercontent.com/MaximeSobrier/congress-app-2024/main/native-node/public/install-linux.sh -o install-linux.sh && bash install-linux.sh
+    curl https://raw.githubusercontent.com/MaximeSobrier/congress-app-2024/main/native-node/public/install-macosx.sh -o install-macosx.sh && bash install-macosx.sh
 
 To enforce a policy (a list of categories to block), and to ensure all users on the computer have the extension installed an the policy enforced, do the following:
 1. Generate a `policy.json` file using [https://icategorize.com/extension/policy.html](https://icategorize.com/extension/policy.html)
 2. Run the script `install-windows.ps1` with these arguments:
 
+### Linux automated installation
 
-    bash install-linux.sh -enforce -scope=computer
+In the console, run the following command:
 
+    curl https://raw.githubusercontent.com/MaximeSobrier/congress-app-2024/main/native-node/public/install-linux.sh -o install-linux.sh && zsh install-linux.sh
+
+To enforce a policy (a list of categories to block), and to ensure all users on the computer have the extension installed an the policy enforced, do the following:
+1. Generate a `policy.json` file using [https://icategorize.com/extension/policy.html](https://icategorize.com/extension/policy.html)
+2. Use com.google.Chrome.plist to generate a policy
 
 ## Manual Installation
+
+Prerequisites: node.js 16 or higher
+
+1. Download the native App at (https://icategorize.com/extension-chrome/web-classification.zip)
+2. Unzip the archive
+3. Test that the native app is working: node index.js --test
+4. Register the Native messaging host: (https://developer.chrome.com/docs/extensions/develop/concepts/native-messaging)
+5. Install the extension at (https://chromewebstore.google.com/detail/website-classification/beakpmhehilljkbehdgcnfnhbopfgmpn)
 
 
 ## Future work
