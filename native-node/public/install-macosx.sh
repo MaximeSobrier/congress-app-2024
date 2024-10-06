@@ -56,7 +56,7 @@ check_node_version() {
   fi
 
   # Extract the major version number
-  NODE_MAJOR_VERSION=$(echo $NODE_VERSION | grep -oP 'v\K[0-9]+')
+  NODE_MAJOR_VERSION=$(echo $NODE_VERSION | grep -oE 'v[0-9]+' | cut -d 'v' -f 2)
 
   # Check if the major version is the required version or higher
   if [ "$NODE_MAJOR_VERSION" -ge "$required_version" ]; then
