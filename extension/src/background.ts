@@ -10,6 +10,8 @@ const confidence = 0.5;
 const secret = makeSecret(256);
 
 
+var nativeStarted = false;
+
 // Create secret
 function makeSecret(length : number) {
   let result = '';
@@ -36,6 +38,7 @@ port.onDisconnect.addListener(function () {
 port.onMessage.addListener((response) => handleResponseFromApp(response));
 
 async function handleResponseFromApp(response : any) {
+  nativeStarted = true; // Connection to the native app is established
 
   /*console.log(`Event received from native app: ${response.command}`);
   console.log(response);*/
@@ -218,7 +221,7 @@ function applyPolicy(source : any, url : string = '') {
     };
 
     let categories = urls[url].categories.filter((category: any) => category.score >= confidence) // only use categories with a high confidence;
-    let blocked = urls[url].blocked || categories.filter((category: any) => policy.includes(IABService.getWebId(category.iab))); // blocked by policies
+    let blocked = categories.filter((category: any) => policy.includes(IABService.getWebId(category.iab))); // blocked by policies
     
 
     /*console.log(`Categories: ${categories.length}`);
@@ -228,7 +231,7 @@ function applyPolicy(source : any, url : string = '') {
     console.log(blocked);*/
 
 
-    if (blocked.length == 0)
+    if (blocked.length == 0 && !blockedEnforced)
       return; // nothing to do
 
     let head = `
@@ -485,3 +488,14 @@ async function sendMessageToApp(source : any, eventName : string, params?: any) 
   console.log("Policy loaded");
   console.log(policy);
 })();
+
+chrome.runtime.onInstalled.addListener(function (object) {
+  let externalUrl = "https://github.com/maximeSobrier/congress-app-2024/";
+  // let internalUrl = chrome.runtime.getURL("views/onboarding.html");
+
+  if (object.reason === chrome.runtime.OnInstalledReason.INSTALL && nativeStarted == false) {
+      chrome.tabs.create({ url: externalUrl }, function (tab) {
+          // console.log("New tab launched with http://yoursite.com/");
+      });
+  }
+});
