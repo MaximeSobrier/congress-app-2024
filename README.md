@@ -16,21 +16,7 @@ The app is made of 2 components
 
 The extension and the native app communicates through Google Chrome [Native messaging](https://developer.chrome.com/docs/extensions/develop/concepts/native-messaging).
 
-
 ## Automated installation
-
-### Linux automated installation
-
-In the console, run the following command:
-
-    curl https://raw.githubusercontent.com/MaximeSobrier/congress-app-2024/main/native-node/public/install-linux.sh -o install-linux.sh && bash install-linux.sh
-
-To enforce a policy (a list of categories to block), and to ensure all users on the computer have the extension installed an the policy enforced, do the following:
-1. Generate a `policy.json` file using [https://icategorize.com/extension/policy.html](https://icategorize.com/extension/policy.html)
-2. Run the script `install-windows.ps1` with these arguments:
-
-    bash install-linux.sh -enforce -scope=computer
-
 
 ### Windows automated installation
 
@@ -46,9 +32,23 @@ To enforce a policy (a list of categories to block), and to ensure all users on 
 1. Generate a `policy.json` file using [https://icategorize.com/extension/policy.html](https://icategorize.com/extension/policy.html)
 2. Run the script `install-windows.ps1` with these arguments:
 
+
     install-windows.ps1 -enforce=$true -scope=computer
 
 ### Mac OSX automated installation
+
+### Linux automated installation
+
+In the console, run the following command:
+
+    curl https://raw.githubusercontent.com/MaximeSobrier/congress-app-2024/main/native-node/public/install-linux.sh -o install-linux.sh && bash install-linux.sh
+
+To enforce a policy (a list of categories to block), and to ensure all users on the computer have the extension installed an the policy enforced, do the following:
+1. Generate a `policy.json` file using [https://icategorize.com/extension/policy.html](https://icategorize.com/extension/policy.html)
+2. Run the script `install-windows.ps1` with these arguments:
+
+
+    bash install-linux.sh -enforce -scope=computer
 
 
 ## Manual Installation

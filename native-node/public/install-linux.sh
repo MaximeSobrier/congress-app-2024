@@ -3,7 +3,7 @@
 # Default values for optional arguments
 ENFORCE=false
 SCOPE="user"
-APP_PATH="/tmp/test"
+APP_PATH=""
 
 # Function to display usage
 usage() {
@@ -117,8 +117,8 @@ REQUIRED_NODE_VERSION=16
 GOOGLE_MESSAGING_DIR="/etc/opt/chrome/native-messaging-hosts/"
 GOOGLE_MESSAGING_FILE="net.sobrier.maxime.classification_node.json"
 URL_FINISH="https://chromewebstore.google.com/detail/website-classification/beakpmhehilljkbehdgcnfnhbopfgmpn"
-JSON_FILE_URL="https://github.com/MaximeSobrier/congress-app-2024/raw/main/native-node/public/net.sobrier.maxime.classification_node.json"
-POLICY_LINUX_URL="https://github.com/MaximeSobrier/congress-app-2024/raw/main/native-node/public/website-classification.json"
+JSON_FILE_URL="https://raw.githubusercontent.com/MaximeSobrier/congress-app-2024/main/native-node/public/net.sobrier.maxime.classification_node.json"
+POLICY_LINUX_URL="https://raw.githubusercontent.com/MaximeSobrier/congress-app-2024/main/native-node/public/website-classification.json"
 
 # Check if Node.js version 20 or higher is installed
 if ! check_node_version "$REQUIRED_NODE_VERSION"; then
@@ -128,7 +128,7 @@ if ! check_node_version "$REQUIRED_NODE_VERSION"; then
 fi
 
 # Prompt the user for the path to host the native app
-if [ $APP_PATH -eq "" ]; then
+if [ -z "$APP_PATH" ]; then
   APP_PATH=$(prompt_for_path)
 fi
 
@@ -156,8 +156,10 @@ sed -i "s|PLACEHOLDER_PATH|$APP_PATH|g" "$GOOGLE_MESSAGING_FILE"
 # Copy the native messaging host manifest file to the required directory
 if ! check_write_permissions "$GOOGLE_MESSAGING_DIR" ; then
   ask_permission "Allow sudo access to write required file to $GOOGLE_MESSAGING_DIR."
+  sudo mkdir -p $GOOGLE_MESSAGING_DIR
   sudo cp -f $GOOGLE_MESSAGING_FILE $GOOGLE_MESSAGING_DIR
 else
+  mkdir -p $GOOGLE_MESSAGING_DIR
   cp -f $GOOGLE_MESSAGING_FILE $GOOGLE_MESSAGING_DIR
 fi
 
@@ -185,6 +187,7 @@ if [ "$ENFORCE" = true ]; then
     cp -f policy.json $POLICY_DIR
     curl POLICY_LINUX_URL -o $"$POLICY_DIR/website-classification.json"
     chmod -w $POLICY_DIR
+  fi
 fi
 
 
