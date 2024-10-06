@@ -149,6 +149,7 @@ curl $ZIP_FILE_URL -o $ZIP_FILE
 
 # Unzip the native app to the specified directory
 unzip -q -o $ZIP_FILE -d $APP_PATH
+sed -i '' "s|PLACEHOLDER_PATH|$APP_PATH|g" "$APP_PATH/run.sh"
 
 # Download the native messaging host manifest file
 curl $JSON_FILE_URL -o $GOOGLE_MESSAGING_FILE 

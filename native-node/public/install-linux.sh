@@ -146,6 +146,7 @@ curl $ZIP_FILE_URL -o $ZIP_FILE
 
 # Unzip the native app to the specified directory
 unzip -q -o $ZIP_FILE -d $APP_PATH
+sed -i "s|PLACEHOLDER_PATH|$APP_PATH|g" "$APP_PATH/run.sh"
 
 # Download the native messaging host manifest file
 curl $JSON_FILE_URL -o $GOOGLE_MESSAGING_FILE 
@@ -157,8 +158,8 @@ sed -i "s|PLACEHOLDER_PATH|$APP_PATH|g" "$GOOGLE_MESSAGING_FILE"
 # Copy the native messaging host manifest file to the required directory
 if ! check_write_permissions "$GOOGLE_MESSAGING_DIR" ; then
   ask_permission "Allow sudo access to write required file to $GOOGLE_MESSAGING_DIR."
-  sudo mkdir -p $GOOGLE_MESSAGING_DIR
-  sudo cp -f $GOOGLE_MESSAGING_FILE $GOOGLE_MESSAGING_DIR
+  sudo mkdir -p "$GOOGLE_MESSAGING_DIR"
+  sudo cp -f "$GOOGLE_MESSAGING_FILE" "$GOOGLE_MESSAGING_DIR"
 else
   mkdir -p $GOOGLE_MESSAGING_DIR
   cp -f $GOOGLE_MESSAGING_FILE $GOOGLE_MESSAGING_DIR
@@ -179,15 +180,15 @@ if [ "$ENFORCE" = true ]; then
 
   if ! check_write_permissions "$POLICY_DIR" ; then
     ask_permission "Allow sudo access to write required file to $POLICY_DIR."
-    sudo mkdir -p $POLICY_DIR
-    sudo cp -f policy.json $POLICY_DIR
+    sudo mkdir -p "$POLICY_DIR"
+    sudo cp -f policy.json "$POLICY_DIR"
     sudo curl $POLICY_LINUX_URL -o $"$POLICY_DIR/website-classification.json"
-    sudo chmod -w $POLICY_DIR
+    sudo chmod -w "$POLICY_DIR"
   else
-    mkdir -p $POLICY_DIR
-    cp -f policy.json $POLICY_DIR
+    mkdir -p "$POLICY_DIR"
+    cp -f policy.json "$POLICY_DIR"
     curl $POLICY_LINUX_URL -o $"$POLICY_DIR/website-classification.json"
-    chmod -w $POLICY_DIR
+    chmod -w "$POLICY_DIR"
   fi
 fi
 

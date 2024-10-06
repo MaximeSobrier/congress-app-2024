@@ -59,14 +59,13 @@ To enforce a policy (a list of categories to block), and to ensure all users on 
 
     bash install-linux.sh -enforce -scope=computer
 
-
 ## Manual Installation
 
 Prerequisites: node.js 16 or higher
 
 1. Download the native App at https://icategorize.com/extension-chrome/web-classification.zip
 2. Unzip the archive
-3. Test that the native app is working: node index.js --test
+3. Test that the native app is working: `node index.js --test`
 4. Register the Native messaging host: https://developer.chrome.com/docs/extensions/develop/concepts/native-messaging
 5. Install the extension at https://chromewebstore.google.com/detail/website-classification/beakpmhehilljkbehdgcnfnhbopfgmpn
 
