@@ -16,7 +16,7 @@ The app is made of 2 components
 
 The extension and the native app communicates through Google Chrome [Native messaging](https://developer.chrome.com/docs/extensions/develop/concepts/native-messaging).
 
-[https://www.youtube.com/watch?v=qUuRzKey6G8](https://www.youtube.com/watch?v=qUuRzKey6G8)
+[![Extension demo](https://img.youtube.com/vi/qUuRzKey6G8/0.jpg)](https://www.youtube.com/watch?v=qUuRzKey6G8)
 
 ## Automated installation
 
